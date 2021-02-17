@@ -1,21 +1,35 @@
 import React from 'react';
-import {render} from 'react-dom';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
-import { rootReducer } from './redux/rootReducer';
-import { createStore, compose } from 'redux';
+import { render } from 'react-dom';
+import { createStore, compose, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
+import App from './App';
+import { rootReducer } from './redux/rootReducer';
+import * as serviceWorker from './serviceWorker';
+import { forbiddenWordsMiddleware } from './redux/middleware';
+import { sagaWatcher } from './redux/sagas';
+
+const saga = createSagaMiddleware();
 
 const store = createStore(
   rootReducer,
   compose(
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-))
+    applyMiddleware(
+      thunk,
+      forbiddenWordsMiddleware,
+      saga
+    ),
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  ),
+);
+
+saga.run(sagaWatcher);
 
 render(
   <Provider store={store}>
     <App />
   </Provider>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 serviceWorker.unregister();

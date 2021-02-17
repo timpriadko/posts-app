@@ -11,16 +11,16 @@ function App() {
           <PostForm />
         </div>
       </div>
-        <div className="row">
-          <div className="col">
-            <h2>Синхронные Посты</h2>
-            <Posts />
-          </div>
-          <div className="col">
-            <h2>Асинхронные Посты</h2>
-            <FetchPosts posts={[]} />
-          </div>
+      <div className="row">
+        <div className="col">
+          <h2>Синхронные Посты</h2>
+          <Posts />
         </div>
+        <div className="col">
+          <h2>Асинхронные Посты</h2>
+          <FetchPosts />
+        </div>
+      </div>
     </div>
   );
 }
